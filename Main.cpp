@@ -16,7 +16,8 @@ int main(int arc, const char** argv)
     if (!fileSystem.checkDirectory(targetDirectory)) { return 1; }
 
     // Create an output directory where the new watermarked images will be stored
-    fileSystem.createOutputDirectory(targetDirectory);
+    std::string path = targetDirectory + "\\watermarked_images";
+    fileSystem.createDirectory(path);
 
     Watermarker marker;
 

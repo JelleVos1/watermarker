@@ -1,36 +1,47 @@
 #include "FileSystem.h"
-#include <boost/filesystem.hpp>
+#include <iostream>
+#include <boost/algorithm/string.hpp>
 
-void FileSystem::createOutputDirectory(std::string& targetDirectory)
+void FileSystem::createDirectory(std::string& directory)
 {
-	std::string command = "mkdir \"" + targetDirectory + "\\watermarked_images\"";
-
-	system(command.c_str());
+    boost::filesystem::create_directory(directory);
 }
 
-bool FileSystem::checkDirectory(std::string& targetDirectory)
+bool FileSystem::checkDirectory(std::string& directory)
 {
-    try
+    if (boost::filesystem::exists(directory))
     {
-        if (boost::filesystem::exists(targetDirectory))
+        if (!boost::filesystem::is_directory(directory))
         {
-            if (!boost::filesystem::is_directory(targetDirectory))
-            {
-                std::cout << "The given path is invalid.\n";
-                return false;
-            }
-        }
-        else
-        {
-            std::cout << targetDirectory << " does not exist\n";
+            std::cout << "The given path is not a directory.\n";
             return false;
         }
     }
-    catch (const boost::filesystem::filesystem_error & ex)
+    else
     {
-        std::cout << ex.what() << '\n';
+        std::cout << directory << " does not exist\n";
         return false;
     }
 
     return true;
+}
+
+bool FileSystem::checkFile(boost::filesystem::path& filePath)
+{
+    // Check if the file is a regular file
+    if (!boost::filesystem::is_regular_file(filePath)) { return false; }
+
+    // Get the file extension in lower case
+    std::string fileExtension = filePath.extension().string();
+    boost::to_lower(fileExtension);
+
+    // Check if the file extension matches one of the valid ones
+    if (std::find(validExtensions.begin(), validExtensions.end(), fileExtension) != validExtensions.end())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }

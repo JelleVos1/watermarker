@@ -1,11 +1,22 @@
 #pragma once
 
-#include <iostream>
+#include <string>
+#include <vector>
+#include <boost/filesystem.hpp>
 
 class FileSystem
 {
+private:
+	std::vector<std::string> validExtensions = {
+		".png",
+		".jpg",
+		".tiff",
+		".jpeg"
+	};
+
 public:
-	void createOutputDirectory(std::string& targetDirectory);
-	bool checkDirectory(std::string& targetDirectory);
+	void createDirectory(std::string& directory);
+	bool checkDirectory(std::string& directory);
+	bool checkFile(boost::filesystem::path& filePath);
 };
 

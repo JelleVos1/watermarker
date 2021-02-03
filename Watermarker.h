@@ -5,5 +5,5 @@
 class Watermarker
 {
 public:
-	void mark(std::string targetDirectory, std::string watermarkPath);
+	void mark(std::string& targetDirectory, std::string& watermarkPath);
 };
