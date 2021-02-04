@@ -1,26 +1,27 @@
-#include <iostream>
-#include "FileSystem.h"
+#include "FileUtils.h"
 #include "Watermarker.h"
 
-int main(int arc, const char** argv)
+#include <iostream>
+#include <string>
+#include <filesystem>
+
+int main(int argc, const char** argv)
 {
-    // Get the given argument for the target directory
+    if (argc != 3)
+    {
+        std::cout << "Too " << ((argc < 3) ? "little" : "many") << " arguments given." << "\n";
+        return 1;
+    }
+
     std::string targetDirectory = argv[1];
-
-    // Get the given argument for the watermark file
-    std::string watermarkPath = argv[2];
-
-    FileSystem fileSystem;
-
-    // Check if the target directory is valid
-    if (!fileSystem.checkDirectory(targetDirectory)) { return 1; }
+    std::string watermarkImagePath = argv[2];
 
     // Create an output directory where the new watermarked images will be stored
-    std::string path = targetDirectory + "\\watermarked_images";
-    fileSystem.createDirectory(path);
+    if (!file_utils::createDirectory(targetDirectory, "watermarked_images"))
+    {
+        return 1;
+    }
 
-    Watermarker marker;
-
-    // Mark all the images in the target directory with the watermarkPath image
-    marker.mark(targetDirectory, watermarkPath);
+    // Watermark all the images in the target directory
+    Watermarker::mark(targetDirectory, watermarkImagePath);
 }

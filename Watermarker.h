@@ -1,9 +1,21 @@
 #pragma once
 
-#include <iostream>
+#include <string>
+#include <filesystem>
+#include <string_view>
+
+constexpr std::string_view imageExtensions[] {
+	".png",
+	".jpg",
+	".tiff",
+	".jpeg"
+};
 
 class Watermarker
 {
+private:
+	static bool validFile(const std::filesystem::path& filePath);
+
 public:
-	void mark(std::string& targetDirectory, std::string& watermarkPath);
+	static void mark(const std::string& targetDirectory, const std::string& watermarkPath);
 };
