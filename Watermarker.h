@@ -1,21 +1,21 @@
-#pragma once
+#ifndef WATERMARKER_H
+#define WATERMARKER_H
 
-#include <string>
 #include <filesystem>
 #include <string_view>
+#include <string>
 
-constexpr std::string_view imageExtensions[] {
-	".png",
-	".jpg",
-	".tiff",
-	".jpeg"
-};
-
-class Watermarker
+namespace Watermarker
 {
-private:
-	static bool validFile(const std::filesystem::path& filePath);
+	constexpr std::string_view imageExtensions[]{
+		".png",
+		".jpg",
+		".tiff",
+		".jpeg"
+	};
 
-public:
-	static void mark(const std::string& targetDirectory, const std::string& watermarkPath);
-};
+	void mark(const std::string& targetDirectory, const std::filesystem::path& imagePath, const std::string& watermarkPath);
+	void markDirectory(const std::string& targetDirectory, const std::string& watermarkPath);
+}
+
+#endif

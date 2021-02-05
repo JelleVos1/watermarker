@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <filesystem>
 
 int main(int argc, const char** argv)
 {
@@ -14,14 +13,12 @@ int main(int argc, const char** argv)
     }
 
     std::string targetDirectory = argv[1];
-    std::string watermarkImagePath = argv[2];
+    std::string watermarkPath = argv[2];
 
-    // Create an output directory where the new watermarked images will be stored
     if (!file_utils::createDirectory(targetDirectory, "watermarked_images"))
     {
         return 1;
     }
 
-    // Watermark all the images in the target directory
-    Watermarker::mark(targetDirectory, watermarkImagePath);
+    Watermarker::markDirectory(targetDirectory, watermarkPath);
 }
