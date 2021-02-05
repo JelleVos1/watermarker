@@ -6,7 +6,7 @@
 
 namespace Watermarker
 {
-    bool validFile(const std::filesystem::path & path)
+    bool validFile(const std::filesystem::path& path)
     {
         if (!std::filesystem::is_regular_file(path)) { return false; }
 
@@ -18,33 +18,33 @@ namespace Watermarker
         return std::find(std::begin(imageExtensions), std::end(imageExtensions), fileExtension) != std::end(imageExtensions);
     }
 
-    cv::Mat loadImage(const std::string & path)
+    cv::Mat loadImage(const std::string& path)
     {
         if (!validFile(path))
         {
             if (!std::filesystem::is_directory(path))
             {
-                std::cout << path << " is invalid\n";
+                std::cerr << path << " is invalid\n";
             }
 
             return cv::Mat{};
         }
 
         cv::Mat image = cv::imread(path, cv::IMREAD_UNCHANGED);
-        if (image.data == NULL)
+        if (!image.data)
         {
-            std::cout << "Not enough permissions to read file " << path << "\n";
+            std::cerr << "Not enough permissions to read file " << path << "\n";
             return cv::Mat{};
         }
 
         return image;
     }
 
-    void saveImage(const std::string & path, cv::Mat & image)
+    void saveImage(const std::string& path, cv::Mat& image)
     {
         if (!cv::imwrite(std::filesystem::path(path).make_preferred().string(), image))
         {
-            std::cout << "Could not save " << path << "\n";
+            std::cerr << "Could not save " << path << "\n";
         }
     }
 
@@ -53,7 +53,7 @@ namespace Watermarker
         cv::Mat watermarkImage = loadImage(watermarkPath);
         cv::Mat image = loadImage(imagePath.string());
 
-        if (watermarkImage.data == NULL || image.data == NULL) { return; }
+        if (!watermarkImage.data || !image.data) { return; }
 
         cv::resize(watermarkImage, watermarkImage, image.size());
 

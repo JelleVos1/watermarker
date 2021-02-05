@@ -8,7 +8,7 @@ int main(int argc, const char** argv)
 {
     if (argc != 3)
     {
-        std::cout << "Too " << ((argc < 3) ? "little" : "many") << " arguments given." << "\n";
+        std::cerr << "Too " << ((argc < 3) ? "little" : "many") << " arguments given." << "\n";
         return 1;
     }
 

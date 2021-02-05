@@ -11,13 +11,13 @@ namespace file_utils
         {
             if (!std::filesystem::is_directory(path))
             {
-                std::cout << "The given path is not a directory.\n";
+                std::cerr << "The given path is not a directory.\n";
                 return false;
             }
         }
         else
         {
-            std::cout << path << " does not exist\n";
+            std::cerr << path << " does not exist\n";
             return false;
         }
 
