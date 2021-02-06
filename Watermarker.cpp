@@ -48,31 +48,34 @@ namespace Watermarker
         }
     }
 
-    void mark(const std::string& targetDirectory, const std::filesystem::path& imagePath, const std::string& watermarkPath)
+    void mark(const std::string& targetDirectory, const std::filesystem::path& imagePath, cv::Mat& watermark)
     {
-        cv::Mat watermarkImage = loadImage(watermarkPath);
         cv::Mat image = loadImage(imagePath.string());
 
-        if (!watermarkImage.data || !image.data) { return; }
+        if (!image.data) { return; }
 
-        cv::resize(watermarkImage, watermarkImage, image.size());
+        cv::resize(watermark, watermark, image.size());
 
         // Give the images 4 channels
         cv::cvtColor(image, image, cv::COLOR_RGB2RGBA);
-        cv::cvtColor(watermarkImage, watermarkImage, cv::COLOR_RGB2RGBA);
+        cv::cvtColor(watermark, watermark, cv::COLOR_RGB2RGBA);
 
         // Add the watermark to the original image
-        cv::addWeighted(watermarkImage, 0.3, image, 1, 0.0, image);
+        cv::addWeighted(watermark, 0.3, image, 1, 0.0, image);
 
         saveImage(targetDirectory + "/watermarked_images/" + imagePath.filename().string(), image);
     }
 
     void markDirectory(const std::string& targetDirectory, const std::string& watermarkPath)
     {
+        cv::Mat watermark = loadImage(watermarkPath);
+        
+        if (!watermark.data) { return; }
+
         // Loop through all the files in the target directory
         for (const std::filesystem::path& path : std::filesystem::directory_iterator(targetDirectory))
         {
-            mark(targetDirectory, path, watermarkPath);
+            mark(targetDirectory, path, watermark);
         }
     }
 }
