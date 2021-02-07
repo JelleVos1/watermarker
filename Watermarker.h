@@ -1,5 +1,4 @@
-#ifndef WATERMARKER_H
-#define WATERMARKER_H
+#pragma once
 
 #include <filesystem>
 #include <string_view>
@@ -17,5 +16,3 @@ namespace Watermarker
 	void mark(const std::string& targetDirectory, const std::filesystem::path& imagePath, const std::string& watermarkPath);
 	void markDirectory(const std::string& targetDirectory, const std::string& watermarkPath);
 }
-
-#endif

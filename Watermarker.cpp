@@ -1,4 +1,5 @@
 #include "Watermarker.h"
+#include "FileUtils.h"
 
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
@@ -73,9 +74,16 @@ namespace Watermarker
         if (!watermark.data) { return; }
 
         // Loop through all the files in the target directory
+        float count = 0;
         for (const std::filesystem::path& path : std::filesystem::directory_iterator(targetDirectory))
         {
             mark(targetDirectory, path, watermark);
+            count++;
+            std::cout << "\rMarking files progress: " << int(float(count / file_utils::countFiles(targetDirectory) * 100)) << '%';
         }
+
+        // Clear the console
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 }
