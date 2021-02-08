@@ -5,7 +5,6 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <iostream>
-#include <thread>
 
 namespace watermarker
 {
@@ -75,7 +74,7 @@ namespace watermarker
         
         if (!watermark.data) { return; }
 
-        ThreadPool pool(8);
+        ThreadPool pool(std::thread::hardware_concurrency() / 4);
 
         // Loop through all the files in the target directory
         for (const std::filesystem::path& path : std::filesystem::directory_iterator(targetDirectory))
