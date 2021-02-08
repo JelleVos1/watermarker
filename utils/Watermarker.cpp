@@ -1,11 +1,13 @@
 #include "Watermarker.h"
 #include "FileUtils.h"
+#include "../libs/ThreadPool.h"
 
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <iostream>
+#include <thread>
 
-namespace Watermarker
+namespace watermarker
 {
     bool validFile(const std::filesystem::path& path)
     {
@@ -49,7 +51,7 @@ namespace Watermarker
         }
     }
 
-    void mark(const std::string& targetDirectory, const std::filesystem::path& imagePath, cv::Mat& watermark)
+    void mark(const std::string targetDirectory, const std::filesystem::path imagePath, cv::Mat watermark)
     {
         cv::Mat image = loadImage(imagePath.string());
 
@@ -73,17 +75,12 @@ namespace Watermarker
         
         if (!watermark.data) { return; }
 
+        ThreadPool pool(8);
+
         // Loop through all the files in the target directory
-        float count = 0;
         for (const std::filesystem::path& path : std::filesystem::directory_iterator(targetDirectory))
         {
-            mark(targetDirectory, path, watermark);
-            count++;
-            std::cout << "\rMarking files progress: " << int(float(count / file_utils::countFiles(targetDirectory) * 100)) << '%';
+            pool.enqueue(mark, targetDirectory, path, watermark);
         }
-
-        // Clear the console
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 }

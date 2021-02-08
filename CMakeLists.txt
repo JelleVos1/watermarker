@@ -9,6 +9,6 @@ find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 # add the executable
-add_executable(watermarker Main.cpp FileUtils.cpp Watermarker.cpp)
+add_executable(watermarker Main.cpp utils/FileUtils.cpp utils/Watermarker.cpp)
 
 target_link_libraries(watermarker ${OpenCV_LIBS})

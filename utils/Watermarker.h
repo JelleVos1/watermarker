@@ -4,7 +4,7 @@
 #include <string_view>
 #include <string>
 
-namespace Watermarker
+namespace watermarker
 {
 	constexpr std::string_view imageExtensions[]{
 		".png",
@@ -13,6 +13,5 @@ namespace Watermarker
 		".jpeg"
 	};
 
-	void mark(const std::string& targetDirectory, const std::filesystem::path& imagePath, const std::string& watermarkPath);
 	void markDirectory(const std::string& targetDirectory, const std::string& watermarkPath);
 }

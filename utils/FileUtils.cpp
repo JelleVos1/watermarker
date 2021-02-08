@@ -33,7 +33,7 @@ namespace file_utils
         return true;
     }
 
-    int countFiles(const std::string& path)
+    __int64 countFiles(const std::string& path)
     {
         return std::distance(std::filesystem::directory_iterator(path), std::filesystem::directory_iterator{});;
     }

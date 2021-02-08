@@ -1,9 +1,10 @@
-#include "FileUtils.h"
-#include "Watermarker.h"
+#include "utils/FileUtils.h"
+#include "utils/Watermarker.h"
 
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <thread>
 
 int main(int argc, const char** argv)
 {
@@ -23,7 +24,7 @@ int main(int argc, const char** argv)
         return 1;
     }
 
-    Watermarker::markDirectory(targetDirectory, watermarkPath);
+    watermarker::markDirectory(targetDirectory, watermarkPath);
 
     auto stop = std::chrono::high_resolution_clock::now();
 
