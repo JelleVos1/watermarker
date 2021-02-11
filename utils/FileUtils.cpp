@@ -1,7 +1,6 @@
 #include "FileUtils.h"
 
 #include <iostream>
-#include <filesystem>
 
 namespace file_utils
 {
@@ -36,5 +35,10 @@ namespace file_utils
     __int64 countFiles(const std::string& path)
     {
         return std::distance(std::filesystem::directory_iterator(path), std::filesystem::directory_iterator{});;
+    }
+
+    bool exists(const std::string& path)
+    {
+        return std::filesystem::exists(path);
     }
 }

@@ -42,7 +42,7 @@ namespace watermarker
         return image;
     }
 
-    void saveImage(const std::string& path, cv::Mat& image)
+    void saveImage(const std::filesystem::path& path, cv::Mat& image)
     {
         if (!cv::imwrite(std::filesystem::path(path).make_preferred().string(), image))
         {
@@ -52,6 +52,11 @@ namespace watermarker
 
     void mark(const std::string targetDirectory, const std::filesystem::path imagePath, cv::Mat watermark)
     {
+        std::string outputPath = targetDirectory + "/watermarked_images/" + imagePath.filename().string();
+
+        // Check if the image already exists in the watermarked_images directory
+        if (file_utils::exists(outputPath)) { return; }
+
         cv::Mat image = loadImage(imagePath.string());
 
         if (!image.data) { return; }
@@ -65,16 +70,16 @@ namespace watermarker
         // Add the watermark to the original image
         cv::addWeighted(watermark, 0.3, image, 1, 0.0, image);
 
-        saveImage(targetDirectory + "/watermarked_images/" + imagePath.filename().string(), image);
+        saveImage(outputPath, image);
     }
 
     void markDirectory(const std::string& targetDirectory, const std::string& watermarkPath)
     {
         cv::Mat watermark = loadImage(watermarkPath);
-        
+
         if (!watermark.data) { return; }
 
-        ThreadPool pool(std::thread::hardware_concurrency() / 4);
+        ThreadPool pool(std::thread::hardware_concurrency() / 2);
 
         // Loop through all the files in the target directory
         for (const std::filesystem::path& path : std::filesystem::directory_iterator(targetDirectory))
